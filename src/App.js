@@ -6,31 +6,13 @@ export default function App() {
   const [bottomText, setBottomText] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('disastergirl');
   const [memeImageSrc, setMemeImageSrc] = useState('');
-
-  const templateRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    const label = document.querySelector('label[for="template"]');
-    const input = templateRef.current;
-
-    const handleLabelClick = () => {
-      input.value = '';
-      input.focus();
-    };
-
-    const handleInputKeyUp = (event) => {
-      if (event.key === 'Enter' && input.value === 'doge') {
-        setSelectedTemplate('doge');
-      }
-    };
-
-    label.addEventListener('click', handleLabelClick);
-    input.addEventListener('keyup', handleInputKeyUp);
-
-    return () => {
-      label.removeEventListener('click', handleLabelClick);
-      input.removeEventListener('keyup', handleInputKeyUp);
-    };
+    if (selectedTemplate === 'doge') {
+      inputRef.current.value = '';
+      inputRef.current.focus();
+    }
   }, [selectedTemplate]);
 
   const generateMeme = () => {
@@ -84,7 +66,6 @@ export default function App() {
           id="template"
           value={selectedTemplate}
           onChange={handleTemplateChange}
-          ref={templateRef}
         >
           <option value="disastergirl">Disaster Girl</option>
           <option value="doge">Doge</option>
@@ -103,7 +84,10 @@ export default function App() {
           id="bottomText"
           value={bottomText}
           onChange={(e) => setBottomText(e.target.value)}
+          ref={inputRef}
         />
+        {/* Use ref here */}
+
         <br />
         <button onClick={generateMeme}>Generate Meme</button>
         <button onClick={handleDownload}>Download</button>
