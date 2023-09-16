@@ -7,6 +7,7 @@ export default function App() {
   const [selectedTemplate, setSelectedTemplate] = useState('disastergirl');
   const [memeImageSrc, setMemeImageSrc] = useState('');
   const inputRef = useRef(null);
+  A;
 
   useEffect(() => {
     if (selectedTemplate === 'doge') {
