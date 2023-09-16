@@ -7,7 +7,6 @@ export default function App() {
   const [selectedTemplate, setSelectedTemplate] = useState('disastergirl');
   const [memeImageSrc, setMemeImageSrc] = useState('');
   const inputRef = useRef(null);
-  A;
 
   useEffect(() => {
     if (selectedTemplate === 'doge') {
@@ -85,9 +84,9 @@ export default function App() {
           id="bottomText"
           value={bottomText}
           onChange={(e) => setBottomText(e.target.value)}
+          /* Use ref here */
           ref={inputRef}
         />
-        {/* Use ref here */}
 
         <br />
         <button onClick={generateMeme}>Generate Meme</button>
