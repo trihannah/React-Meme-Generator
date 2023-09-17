@@ -2,11 +2,14 @@ import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function App() {
-  const [topText, setTopText] = useState('');
-  const [bottomText, setBottomText] = useState('');
+  const [topText, setTopText] = useState('Enter top text');
+  const [bottomText, setBottomText] = useState('Enter bottom text');
+
   const [selectedTemplate, setSelectedTemplate] = useState('disastergirl');
   const [memeImageSrc, setMemeImageSrc] = useState('');
   const inputRef = useRef(null);
+
+  const memeTemplates = ['disastergirl', 'doge', 'drake'];
 
   useEffect(() => {
     if (selectedTemplate === 'doge') {
@@ -16,9 +19,16 @@ export default function App() {
   }, [selectedTemplate]);
 
   const generateMeme = () => {
-    const apiUrl = `https://api.memegen.link/images/${selectedTemplate}/${encodeURIComponent(
+    // Randomly select a meme template from the array
+    const randomIndex = Math.floor(Math.random() * memeTemplates.length);
+    const randomTemplate = memeTemplates[randomIndex];
+
+    // Construct the API URL with the current text values
+    const apiUrl = `https://api.memegen.link/images/${randomTemplate}/${encodeURIComponent(
       topText,
     )}/${encodeURIComponent(bottomText)}.jpg`;
+
+    console.log('Constructed API URL:', apiUrl);
 
     setMemeImageSrc(apiUrl);
   };
@@ -61,35 +71,41 @@ export default function App() {
 
         <h1 className="headline">Meme Generator</h1>
 
-        <label htmlFor="template">Meme template:</label>
-        <select
-          id="template"
-          value={selectedTemplate}
-          onChange={handleTemplateChange}
-        >
-          <option value="disastergirl">Disaster Girl</option>
-          <option value="doge">Doge</option>
-          <option value="drake">Drake</option>
-        </select>
-        <br />
-        <label htmlFor="topText">Top text:</label>
-        <input
-          id="topText"
-          value={topText}
-          onChange={(e) => setTopText(e.target.value)}
-        />
-        <br />
-        <label htmlFor="bottomText">Bottom text:</label>
-        <input
-          id="bottomText"
-          value={bottomText}
-          onChange={(e) => setBottomText(e.target.value)}
-          /* Use ref here */
-          ref={inputRef}
-        />
-
-        <br />
         <button onClick={generateMeme}>Generate Meme</button>
+
+        <div>
+          <label htmlFor="template">Meme template:</label>
+          <select
+            id="template"
+            value={selectedTemplate}
+            onChange={handleTemplateChange}
+          >
+            {memeTemplates.map((template) => (
+              <option key={`template-${template}`} value={template}>
+                {template.charAt(0).toUpperCase() + template.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="topText">Top text:</label>
+          <input
+            id="topText"
+            value={topText}
+            onChange={(e) => setTopText(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && generateMeme()}
+          />
+
+          <label htmlFor="bottomText">Bottom text:</label>
+          <input
+            id="bottomText"
+            value={bottomText}
+            onChange={(e) => setBottomText(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && generateMeme()}
+          />
+        </div>
+
         <button onClick={handleDownload}>Download</button>
       </div>
     </div>
